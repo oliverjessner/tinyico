@@ -1,0 +1,38 @@
+{
+  "name": "tinyico",
+  "version": "0.1.0",
+  "description": "Zero dependencies. Minimal footprint. Fast ICO processing for Node.js.",
+  "license": "MIT",
+  "author": "Oliver Jessner",
+  "type": "module",
+  "engines": { "node": ">=26" },
+  "sideEffects": false,
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "repository": { "type": "git", "url": "git+https://github.com/oliverjessner/tinyico.git" },
+  "homepage": "https://github.com/oliverjessner/tinyico#readme",
+  "bugs": { "url": "https://github.com/oliverjessner/tinyico/issues" },
+  "keywords": ["ico", "cur", "favicon", "png", "encoder", "decoder"],
+  "publishConfig": { "access": "public" },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "bench": "npm run build && node --expose-gc bench/benchmark.mjs",
+    "docs:graphics": "node bench/render-graphics.mjs",
+    "clean": "node --input-type=module -e \"import {rmSync} from 'node:fs'; rmSync('dist', {recursive:true, force:true})\"",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "release:dry": "npm publish --dry-run",
+    "release": "npm publish --access public"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "typescript": "^6.0.0"
+  }
+}

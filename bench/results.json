@@ -1,0 +1,480 @@
+{
+  "date": "2026-10-14T18:29:00.454Z",
+  "node": "v26.11.1",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M2 Pro",
+  "tinyicoVersion": "0.1.0",
+  "icojsVersion": "1.0.1",
+  "samples": 5,
+  "fixtures": {
+    "mixed.ico": {
+      "bytes": 246373,
+      "sha256": "cd11173612c67c9a55562fd80ed9ce82195159730a2daa19f850c17588f1e407"
+    },
+    "png.ico": {
+      "bytes": 3954,
+      "sha256": "1a1032aec8d7f706d2e224fa3c1957750e15509930e2893f8a48e4a59c31134a"
+    },
+    "legacy.ico": {
+      "bytes": 4286,
+      "sha256": "ca177c110ccd6ceac58b264037e7d3dbfd4aea894e45c8141502a5a20458d061"
+    }
+  },
+  "notes": [
+    "Median of five sequential samples in a fresh process per library/case; preparation and assertions are untimed.",
+    "tinyico loops are synchronous; icojs loops await each operation. The no-op baseline is reported, not subtracted.",
+    "icojs has no public metadata-only API: that comparison is unavailable, rather than substituted with full decoding.",
+    "Extraction uses a single-image container for equal output; encoding explicitly requests PNG entries in icojs.",
+    "Each batch operation decodes 100 icons sequentially (50 PNG, 50 DIB); no concurrent Promise.all advantage.",
+    "Memory is a separate experiment retaining 16 results; arrayBuffers is a subset of external, not additive.",
+    "Process peak RSS includes startup, imports, fixtures, warmup, timing and memory sampling; it is not allocation per operation.",
+    "Compression output size/filters can differ between libraries even when decoded pixels are identical."
+  ],
+  "results": [
+    {
+      "case": "metadata",
+      "library": "tinyico",
+      "mode": "sync",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        2.6032909999999987,
+        1.5185830000000067,
+        1.2976250000000107,
+        1.3717089999999956,
+        1.0889999999999986
+      ],
+      "medianMs": 1.3717089999999956,
+      "microsecondsPerOperation": 2.7434179999999917,
+      "operationsPerSecond": 364508.79887789726,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 26233856,
+          "heapUsed": 5750456,
+          "external": 3565506,
+          "arrayBuffers": 768753
+        },
+        "retained": {
+          "rss": 26201088,
+          "heapUsed": 5758912,
+          "external": 3565546,
+          "arrayBuffers": 768753
+        },
+        "afterRelease": {
+          "rss": 26201088,
+          "heapUsed": 5751296,
+          "external": 3565546,
+          "arrayBuffers": 768753
+        },
+        "processPeakRss": 61964288
+      }
+    },
+    {
+      "case": "png-extract",
+      "library": "tinyico",
+      "mode": "sync",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        2.4841249999999917,
+        1.472915999999998,
+        1.225166999999999,
+        1.1297079999999937,
+        1.013417000000004
+      ],
+      "medianMs": 1.225166999999999,
+      "microsecondsPerOperation": 2.450333999999998,
+      "operationsPerSecond": 408107.6294088891,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 25906272,
+          "heapUsed": 5799264,
+          "external": 3596861,
+          "arrayBuffers": 768753
+        },
+        "retained": {
+          "rss": 25922656,
+          "heapUsed": 5797152,
+          "external": 3596901,
+          "arrayBuffers": 768753
+        },
+        "afterRelease": {
+          "rss": 25922656,
+          "heapUsed": 5795424,
+          "external": 3596901,
+          "arrayBuffers": 768753
+        },
+        "processPeakRss": 61554688
+      }
+    },
+    {
+      "case": "png-extract",
+      "library": "icojs",
+      "mode": "async (await/operation)",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        1.3398749999999922,
+        0.9472499999999968,
+        0.877167,
+        0.8121249999999947,
+        0.9148750000000092
+      ],
+      "medianMs": 0.9148750000000092,
+      "microsecondsPerOperation": 1.8297500000000184,
+      "operationsPerSecond": 546522.749009422,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 29543664,
+          "heapUsed": 6980480,
+          "external": 3675493,
+          "arrayBuffers": 834617
+        },
+        "retained": {
+          "rss": 29560048,
+          "heapUsed": 6982968,
+          "external": 3738445,
+          "arrayBuffers": 897529
+        },
+        "afterRelease": {
+          "rss": 29560048,
+          "heapUsed": 6981368,
+          "external": 3675533,
+          "arrayBuffers": 834617
+        },
+        "processPeakRss": 65552384
+      }
+    },
+    {
+      "case": "dib-to-png",
+      "library": "tinyico",
+      "mode": "sync",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        44.70783399999999,
+        37.91520800000001,
+        37.92783399999999,
+        37.736166999999995,
+        38.222166999999985
+      ],
+      "medianMs": 37.92783399999999,
+      "microsecondsPerOperation": 75.85566799999998,
+      "operationsPerSecond": 13182.930509556652,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 53496808,
+          "heapUsed": 5945408,
+          "external": 3596861,
+          "arrayBuffers": 768753
+        },
+        "retained": {
+          "rss": 53496808,
+          "heapUsed": 5949192,
+          "external": 4121701,
+          "arrayBuffers": 1293553
+        },
+        "afterRelease": {
+          "rss": 53496808,
+          "heapUsed": 5946248,
+          "external": 3596901,
+          "arrayBuffers": 768753
+        },
+        "processPeakRss": 89243648
+      }
+    },
+    {
+      "case": "dib-to-png",
+      "library": "icojs",
+      "mode": "async (await/operation)",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        105.96662500000001,
+        103.17154100000002,
+        102.36574999999999,
+        100.80129199999993,
+        101.64591700000005
+      ],
+      "medianMs": 102.36574999999999,
+      "microsecondsPerOperation": 204.73149999999998,
+      "operationsPerSecond": 4884.446213699407,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 81386624,
+          "heapUsed": 6341744,
+          "external": 3666560,
+          "arrayBuffers": 834617
+        },
+        "retained": {
+          "rss": 81370240,
+          "heapUsed": 6337200,
+          "external": 3691544,
+          "arrayBuffers": 859561
+        },
+        "afterRelease": {
+          "rss": 81370240,
+          "heapUsed": 6327272,
+          "external": 3666600,
+          "arrayBuffers": 834617
+        },
+        "processPeakRss": 173719552
+      }
+    },
+    {
+      "case": "encode",
+      "library": "tinyico",
+      "mode": "sync",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        19.32020899999999,
+        16.758499999999984,
+        16.982207999999986,
+        14.821416999999997,
+        12.790290999999996
+      ],
+      "medianMs": 16.758499999999984,
+      "microsecondsPerOperation": 33.51699999999997,
+      "operationsPerSecond": 29835.605811976042,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 185633888,
+          "heapUsed": 5854640,
+          "external": 3847038,
+          "arrayBuffers": 1018930
+        },
+        "retained": {
+          "rss": 185633888,
+          "heapUsed": 5858744,
+          "external": 7849910,
+          "arrayBuffers": 5021762
+        },
+        "afterRelease": {
+          "rss": 185633888,
+          "heapUsed": 5855480,
+          "external": 3847078,
+          "arrayBuffers": 1018930
+        },
+        "processPeakRss": 221331456
+      }
+    },
+    {
+      "case": "encode",
+      "library": "icojs",
+      "mode": "async (await/operation)",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        1563.5786249999999,
+        1588.91675,
+        1577.466292,
+        1601.9135830000005,
+        1605.6329999999998
+      ],
+      "medianMs": 1588.91675,
+      "microsecondsPerOperation": 3177.8335,
+      "operationsPerSecond": 314.67979678608083,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 180361576,
+          "heapUsed": 6440544,
+          "external": 3916737,
+          "arrayBuffers": 1084794
+        },
+        "retained": {
+          "rss": 180361576,
+          "heapUsed": 6427232,
+          "external": 7919609,
+          "arrayBuffers": 5087626
+        },
+        "afterRelease": {
+          "rss": 180361576,
+          "heapUsed": 6429144,
+          "external": 3916777,
+          "arrayBuffers": 1084794
+        },
+        "processPeakRss": 214777856
+      }
+    },
+    {
+      "case": "batch",
+      "library": "tinyico",
+      "mode": "sync",
+      "iterations": 5,
+      "samples": 5,
+      "elapsedMs": [
+        20.731082999999998,
+        20.66233299999999,
+        19.971791999999994,
+        19.520667000000003,
+        19.22200000000001
+      ],
+      "medianMs": 19.971791999999994,
+      "microsecondsPerOperation": 3994.3583999999987,
+      "operationsPerSecond": 250.35309800943259,
+      "iconsPerOperation": 100,
+      "iconsPerSecond": 25035.309800943258,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 43158504,
+          "heapUsed": 5944360,
+          "external": 3565506,
+          "arrayBuffers": 768753
+        },
+        "retained": {
+          "rss": 60984728,
+          "heapUsed": 6472560,
+          "external": 29805546,
+          "arrayBuffers": 27008753
+        },
+        "afterRelease": {
+          "rss": 61017496,
+          "heapUsed": 5949944,
+          "external": 3565546,
+          "arrayBuffers": 768753
+        },
+        "processPeakRss": 96403456
+      }
+    },
+    {
+      "case": "batch",
+      "library": "icojs",
+      "mode": "async (await/operation)",
+      "iterations": 5,
+      "samples": 5,
+      "elapsedMs": [
+        55.96112500000001,
+        55.03387500000002,
+        52.938999999999965,
+        52.513082999999995,
+        53.589125000000024
+      ],
+      "medianMs": 53.589125000000024,
+      "microsecondsPerOperation": 10717.825000000004,
+      "operationsPerSecond": 93.3025124034027,
+      "iconsPerOperation": 100,
+      "iconsPerSecond": 9330.25124034027,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 99768368,
+          "heapUsed": 7357904,
+          "external": 3644138,
+          "arrayBuffers": 834617
+        },
+        "retained": {
+          "rss": 109500512,
+          "heapUsed": 8061216,
+          "external": 11313778,
+          "arrayBuffers": 8504217
+        },
+        "afterRelease": {
+          "rss": 49649760,
+          "heapUsed": 7381912,
+          "external": 3644178,
+          "arrayBuffers": 834617
+        },
+        "processPeakRss": 143949824
+      }
+    },
+    {
+      "case": "overhead",
+      "library": "tinyico",
+      "mode": "sync",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        0.016749999999987608,
+        0.0085420000000056,
+        0.010292000000006851,
+        0.00866600000000517,
+        0.008624999999994998
+      ],
+      "medianMs": 0.00866600000000517,
+      "microsecondsPerOperation": 0.01733200000001034,
+      "operationsPerSecond": 57696745.90349662,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 24120320,
+          "heapUsed": 5601800,
+          "external": 3565506,
+          "arrayBuffers": 768753
+        },
+        "retained": {
+          "rss": 24120320,
+          "heapUsed": 5602704,
+          "external": 3565546,
+          "arrayBuffers": 768753
+        },
+        "afterRelease": {
+          "rss": 24120320,
+          "heapUsed": 5602640,
+          "external": 3565546,
+          "arrayBuffers": 768753
+        },
+        "processPeakRss": 59604992
+      }
+    },
+    {
+      "case": "overhead",
+      "library": "icojs",
+      "mode": "async (await/operation)",
+      "iterations": 500,
+      "samples": 5,
+      "elapsedMs": [
+        0.06554200000000776,
+        0.0646250000000066,
+        0.06487500000000068,
+        0.02358299999998792,
+        0.021708000000003835
+      ],
+      "medianMs": 0.0646250000000066,
+      "microsecondsPerOperation": 0.1292500000000132,
+      "operationsPerSecond": 7736943.9071558835,
+      "memory": {
+        "gcAvailable": true,
+        "retainedOperations": 16,
+        "before": {
+          "rss": 27118688,
+          "heapUsed": 6892496,
+          "external": 3644138,
+          "arrayBuffers": 834617
+        },
+        "retained": {
+          "rss": 27118688,
+          "heapUsed": 6893448,
+          "external": 3644178,
+          "arrayBuffers": 834617
+        },
+        "afterRelease": {
+          "rss": 27118688,
+          "heapUsed": 6893384,
+          "external": 3644178,
+          "arrayBuffers": 834617
+        },
+        "processPeakRss": 63127552
+      }
+    }
+  ]
+}
