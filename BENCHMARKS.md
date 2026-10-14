@@ -104,10 +104,13 @@ dependencies. Assets live in `docs/assets/` and stay outside the npm tarball.
 
 ## Package footprint
 
+Package artifact: `@oliverj/tinyico@0.1.0`. The saved benchmark timings
+precede the npm scope rename; the library implementation is unchanged.
+
 - dist/: **26,103 bytes** of file contents across 16 files.
 - Compiled JavaScript: **21,031 bytes** (eight ESM modules).
 - Declarations: **5,072 bytes** (eight .d.ts files).
-- npm pack --dry-run: **14,757 bytes compressed**, **44,900 bytes unpacked**, **19 files**.
+- npm pack --dry-run: **14,777 bytes compressed**, **44,981 bytes unpacked**, **19 files**.
 - Included: dist/_.js, dist/_.d.ts, README.md, LICENSE, package.json.
 - Excluded: src/, test/, fixtures, bench/, docs/, this report, development dependencies.
 - Runtime dependencies: **0**. Optional dependencies: **0**. No bundled dependencies.

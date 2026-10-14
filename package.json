@@ -1,5 +1,5 @@
 {
-  "name": "tinyico",
+  "name": "@oliverj/tinyico",
   "version": "0.1.0",
   "description": "Zero dependencies. Minimal footprint. Fast ICO processing for Node.js.",
   "license": "MIT",

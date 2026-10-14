@@ -16,15 +16,17 @@ than general image processing.
 
 ## Installation
 
+The npm package name is `@oliverj/tinyico`.
+
 ```sh
-npm install tinyico
+npm install @oliverj/tinyico
 ```
 
 ## Quick start
 
 ```js
 import { readFileSync, writeFileSync } from 'node:fs';
-import { parseIco, isIco, extractIco, decodeIco, encodeIco } from 'tinyico';
+import { parseIco, isIco, extractIco, decodeIco, encodeIco } from '@oliverj/tinyico';
 
 const buffer = readFileSync('favicon.ico');
 console.log(isIco(buffer));
@@ -173,7 +175,7 @@ CUR requires an explicit hotspot for **every** image, with integer coordinates
 `0 <= x < width` and `0 <= y < height`. ICO inputs with hotspots are rejected.
 The output owns its memory and does not share buffers with the inputs.
 
-All public input, option and result types are exported from `tinyico`.
+All public input, option and result types are exported from `@oliverj/tinyico`.
 
 ## Supported formats
 
